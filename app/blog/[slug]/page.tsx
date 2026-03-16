@@ -3,8 +3,10 @@ import Footer from "@/components/footer"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { getPostBySlug, getAllPosts } from "@/lib/blog"
+import { highlightCode } from "@/lib/shiki"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { BlogCodeBlockWrapper } from "@/components/blog-code-block-wrapper"
 import { Calendar, Clock, ArrowLeft, Tag, Headphones } from "lucide-react"
 import { format } from "date-fns"
 
@@ -161,10 +163,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
         {/* Article Content */}
         <div className="prose prose-lg dark:prose-invert max-w-none">
-          <div 
-            className="blog-content"
-            dangerouslySetInnerHTML={{ __html: formatContent(post.content) }}
-          />
+          <BlogCodeBlockWrapper html={await formatContent(post.content)} />
         </div>
 
         {/* Footer Navigation */}
@@ -203,9 +202,8 @@ function escapeHtml(unsafe: string): string {
     .replace(/'/g, '&#039;')
 }
 
-// Simple markdown-like formatting function
-// In production, you might want to use a proper markdown parser like 'remark' or 'markdown-it'
-function formatContent(content: string): string {
+// Markdown-like formatting with Shiki syntax highlighting for code blocks
+async function formatContent(content: string): Promise<string> {
   // Helper function to process inline markdown formatting
   function processInlineMarkdown(text: string): string {
     let processed = text
@@ -246,16 +244,16 @@ function formatContent(content: string): string {
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i]
     
-    // Handle code blocks
+    // Handle code blocks (syntax highlighting via Shiki at build/render time)
     if (line.startsWith('```')) {
       if (inCodeBlock) {
-        // End of code block
-        result.push(`<pre class="bg-muted p-3 rounded-lg overflow-x-auto mb-2"><code class="text-sm font-mono leading-tight">${codeBlockContent.join('\n').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</code></pre>`)
+        const code = codeBlockContent.join('\n')
+        const highlighted = await highlightCode(code, codeBlockLanguage || 'text')
+        result.push(highlighted)
         codeBlockContent = []
         inCodeBlock = false
         codeBlockLanguage = ''
       } else {
-        // Start of code block
         inCodeBlock = true
         codeBlockLanguage = line.substring(3).trim()
       }

@@ -299,6 +299,19 @@
   @apply bg-transparent p-0 leading-tight;
 }
 
+/* Shiki code blocks + copy button wrapper */
+.blog-code-block {
+  @apply mb-2 overflow-hidden rounded-lg;
+}
+
+.blog-code-block pre {
+  @apply overflow-x-auto p-4 pr-12;
+}
+
+.blog-code-block pre code {
+  @apply text-sm leading-relaxed;
+}
+
 .blog-content blockquote {
   @apply border-l-4 border-primary pl-4 italic my-4 text-muted-foreground;
 }
