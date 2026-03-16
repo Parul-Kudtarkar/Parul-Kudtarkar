@@ -17,7 +17,25 @@ To add a new blog post, edit `/lib/blog.ts` and add a new entry to the `blogPost
   tags: ["AI", "Genomics"],          // Optional array
   content: `Your markdown content here...`,
   readingTime: 5,                    // Optional, in minutes
-  featured: false                    // Optional, for featured posts
+  featured: false,                    // Optional, for featured posts
+  audioUrl: "/audio/your-post.mp3"   // Optional, URL to audio file for listening
+}
+```
+
+## Audio Support
+
+You can add audio to any blog post by including an `audioUrl` field. The audio player will automatically appear on the post page if an audio URL is provided.
+
+**To add audio:**
+1. Place your audio file in the `public/audio/` directory (create it if it doesn't exist)
+2. Add the `audioUrl` field to your blog post with the path: `"/audio/your-file.mp3"`
+3. Supported formats: MP3, WAV, OGG
+
+**Example:**
+```typescript
+{
+  // ... other fields
+  audioUrl: "/audio/essential-toolkit-building-ai-agents-2026.mp3"
 }
 ```
 
@@ -27,6 +45,7 @@ Consider migrating to:
 - Markdown files in this directory (e.g., `content/blog/your-post-slug.md`)
 - A headless CMS (Contentful, Sanity, etc.)
 - MDX for React components in markdown
+- Text-to-speech generation for automatic audio creation
 
 ## Content Formatting
 

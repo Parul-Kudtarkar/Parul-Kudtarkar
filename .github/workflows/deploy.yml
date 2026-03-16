@@ -32,6 +32,9 @@ jobs:
 
       - name: Build
         run: npm run build
+        env:
+          # Optional: set SITE_URL in Settings → Secrets and variables → Actions → Variables to your custom domain (e.g. https://yourdomain.com)
+          NEXT_PUBLIC_SITE_URL: ${{ vars.SITE_URL }}
 
       - name: Setup Pages
         uses: actions/configure-pages@v4

@@ -4,7 +4,7 @@ import Link from "next/link"
 import { getAllPosts, getAllCategories, getAllTags } from "@/lib/blog"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Calendar, Clock, ArrowRight } from "lucide-react"
+import { Calendar, Clock, ArrowRight, Headphones } from "lucide-react"
 import { format } from "date-fns"
 
 export const metadata = {
@@ -54,6 +54,12 @@ export default function BlogPage() {
                       {post.featured && (
                         <Badge variant="default" className="text-xs">
                           Featured
+                        </Badge>
+                      )}
+                      {post.audioUrl && (
+                        <Badge variant="outline" className="text-xs gap-1">
+                          <Headphones className="h-3 w-3" />
+                          Listen
                         </Badge>
                       )}
                     </div>

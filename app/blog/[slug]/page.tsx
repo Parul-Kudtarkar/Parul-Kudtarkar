@@ -5,7 +5,7 @@ import { notFound } from "next/navigation"
 import { getPostBySlug, getAllPosts } from "@/lib/blog"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Calendar, Clock, ArrowLeft, Tag } from "lucide-react"
+import { Calendar, Clock, ArrowLeft, Tag, Headphones } from "lucide-react"
 import { format } from "date-fns"
 
 interface BlogPostPageProps {
@@ -130,6 +130,35 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           </div>
         )}
 
+        {/* Audio Player — listen to the article */}
+        {post.audioUrl && (
+          <div className="mb-8 p-5 bg-muted/80 rounded-xl border border-border shadow-sm">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary">
+                <Headphones className="h-5 w-5" />
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold">Listen to this article</h3>
+                <p className="text-sm text-muted-foreground">
+                  Play the audio version while you read or on the go.
+                </p>
+              </div>
+            </div>
+            <audio
+              controls
+              className="w-full h-12 audio-player"
+              preload="metadata"
+              aria-label="Audio version of this article"
+            >
+              <source src={post.audioUrl} type="audio/mpeg" />
+              <source src={post.audioUrl} type="audio/mp3" />
+              <source src={post.audioUrl} type="audio/wav" />
+              <source src={post.audioUrl} type="audio/ogg" />
+              Your browser does not support the audio element.
+            </audio>
+          </div>
+        )}
+
         {/* Article Content */}
         <div className="prose prose-lg dark:prose-invert max-w-none">
           <div 
@@ -153,6 +182,27 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   )
 }
 
+// Allow only safe URL schemes to prevent XSS
+function isSafeHref(url: string): boolean {
+  const t = url.trim().toLowerCase()
+  return (
+    t.startsWith('https://') ||
+    t.startsWith('http://') ||
+    t.startsWith('mailto:') ||
+    t.startsWith('/') ||
+    t.startsWith('#')
+  )
+}
+
+function escapeHtml(unsafe: string): string {
+  return unsafe
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;')
+}
+
 // Simple markdown-like formatting function
 // In production, you might want to use a proper markdown parser like 'remark' or 'markdown-it'
 function formatContent(content: string): string {
@@ -172,10 +222,17 @@ function formatContent(content: string): string {
     // Process italic (*text* or _text_) - but not if it's part of bold
     processed = processed.replace(/(?<!\*)\*([^*\n]+?)\*(?!\*)/g, '<em>$1</em>')
     processed = processed.replace(/(?<!_)_([^_\n]+?)_(?!_)/g, '<em>$1</em>')
-    // Process links [text](url)
-    processed = processed.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="text-primary hover:underline">$1</a>')
-    // Process inline code `code`
-    processed = processed.replace(/`([^`]+)`/g, '<code class="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">$1</code>')
+    // Process links [text](url) - only allow safe hrefs to prevent XSS
+    processed = processed.replace(
+      /\[([^\]]+)\]\(([^)]+)\)/g,
+      (_, linkText: string, href: string) => {
+        const safeHref = isSafeHref(href) ? href : '#'
+        const safeText = escapeHtml(linkText)
+        return `<a href="${escapeHtml(safeHref)}" class="text-primary hover:underline" rel="noopener noreferrer">${safeText}</a>`
+      }
+    )
+    // Process inline code `code` (escape to prevent XSS)
+    processed = processed.replace(/`([^`]+)`/g, (_, code: string) => `<code class="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">${escapeHtml(code)}</code>`)
     
     return processed
   }

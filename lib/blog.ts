@@ -10,6 +10,7 @@ export interface BlogPost {
   readingTime?: number
   featured?: boolean
   image?: string
+  audioUrl?: string
 }
 
 // Sample blog posts - in production, you might load these from markdown files or a CMS
@@ -324,7 +325,8 @@ Start simple. Build something that works. Get it in front of users. Learn what b
 
 **The toolkit is here. The question is: what are you going to build?**`,
     readingTime: 12,
-    featured: true
+    featured: true,
+    audioUrl: "/audio/essential-toolkit-building-ai-agents-2026.mp3",
   },
   {
     slug: "welcome-to-my-blog",
@@ -349,7 +351,8 @@ In this space, I'll cover:
 I'm a bioinformatics leader with 20 years of experience building AI-powered platforms that transform genomic data into therapeutic insights. As a generalist who bridges the gap between software engineering and life sciences, I've led large-scale initiatives at Caltech, UCSD and Harvard Medical School. Educated at Northeastern University, my work spans cloud computing, machine learning and single-cell genomics to understand disease etiology and accelerate drug discovery.
 Stay tuned for more content!`,
     readingTime: 2,
-    featured: true
+    featured: true,
+    audioUrl: "/audio/welcome-to-my-blog.mp3",
   }
 ]
 

@@ -303,6 +303,23 @@
   @apply border-l-4 border-primary pl-4 italic my-4 text-muted-foreground;
 }
 
+/* Audio player styling (blog listen feature) */
+audio,
+.audio-player {
+  width: 100%;
+  min-height: 40px;
+  max-height: 48px;
+}
+
+audio::-webkit-media-controls-panel {
+  background-color: var(--muted);
+}
+
+audio::-webkit-media-controls-play-button {
+  background-color: var(--primary);
+  border-radius: 50%;
+}
+
 /* Hide Next.js development indicator overlay */
 #__next-build-watcher,
 [data-nextjs-dialog],
