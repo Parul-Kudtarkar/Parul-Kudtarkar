@@ -14,6 +14,19 @@ To make Open Graph, Twitter cards, and sitemaps use your real domain instead of 
 
 If `SITE_URL` is not set, the site falls back to `https://parulkudtarkar.com` for metadata.
 
+## Google Analytics
+
+The site uses **Google Analytics 4 (GA4)**. To enable it:
+
+1. In [Google Analytics](https://analytics.google.com/), create or use a GA4 property and copy your **Measurement ID** (e.g. `G-XXXXXXXXXX`).
+2. In your repo go to **Settings → Secrets and variables → Actions**.
+3. Under **Variables**, add:
+   - **Name:** `NEXT_PUBLIC_GA_MEASUREMENT_ID`
+   - **Value:** your Measurement ID (e.g. `G-XXXXXXXXXX`)
+4. Re-run the deploy workflow (or push a commit).
+
+If this variable is not set, the GA scripts are not included and the site runs without analytics.
+
 ## Security on GitHub Pages
 
 GitHub Pages does **not** allow custom HTTP headers. Security is handled by:
