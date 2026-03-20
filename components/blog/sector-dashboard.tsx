@@ -105,6 +105,22 @@ export function SectorDashboard() {
       </div>
 
       <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          paddingTop: "12px",
+          borderTop: "1px solid #f0f0f0",
+          marginTop: "16px",
+          color: "#8e8e93",
+          fontSize: "11px",
+          width: "100%",
+        }}
+      >
+        <span>parulkudtarkar.com</span>
+        <span>176 job descriptions · March 2026</span>
+      </div>
+
+      <div
         className="mt-5 flex flex-wrap items-center justify-center gap-x-6 gap-y-2"
         style={{ fontSize: "12px", color: "#1d1d1f" }}
       >

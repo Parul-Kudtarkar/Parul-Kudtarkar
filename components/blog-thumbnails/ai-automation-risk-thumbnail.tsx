@@ -51,29 +51,29 @@ export function AiAutomationRiskThumbnail() {
         textAnchor="middle"
       >
         {/* Circle 1 */}
-        <circle cx={118} cy={270} r={70} fill="#ffffff" stroke="#EC4899" strokeWidth={2} />
-        <text x={118} y={270} fontSize={26} fontWeight={700} fill="#EC4899" dominantBaseline="middle">
+        <circle cx={118} cy={338} r={70} fill="#ffffff" stroke="#EC4899" strokeWidth={2} />
+        <text x={118} y={338} fontSize={26} fontWeight={700} fill="#EC4899" dominantBaseline="middle">
           10.5%
         </text>
-        <text x={118} y={360} fontSize={16} fontWeight={600} fill="#1d1d1f" dominantBaseline="middle">
+        <text x={118} y={428} fontSize={16} fontWeight={600} fill="#1d1d1f" dominantBaseline="middle">
           Automate
         </text>
 
         {/* Circle 2 */}
-        <circle cx={600} cy={270} r={70} fill="#ffffff" stroke="#8B5CF6" strokeWidth={2} />
-        <text x={600} y={270} fontSize={26} fontWeight={700} fill="#8B5CF6" dominantBaseline="middle">
+        <circle cx={600} cy={338} r={70} fill="#ffffff" stroke="#8B5CF6" strokeWidth={2} />
+        <text x={600} y={338} fontSize={26} fontWeight={700} fill="#8B5CF6" dominantBaseline="middle">
           27.3%
         </text>
-        <text x={600} y={360} fontSize={16} fontWeight={600} fill="#1d1d1f" dominantBaseline="middle">
+        <text x={600} y={428} fontSize={16} fontWeight={600} fill="#1d1d1f" dominantBaseline="middle">
           Augment
         </text>
 
         {/* Circle 3 */}
-        <circle cx={1082} cy={270} r={70} fill="#ffffff" stroke="#4A90D9" strokeWidth={2} />
-        <text x={1082} y={270} fontSize={26} fontWeight={700} fill="#4A90D9" dominantBaseline="middle">
+        <circle cx={1082} cy={338} r={70} fill="#ffffff" stroke="#4A90D9" strokeWidth={2} />
+        <text x={1082} y={338} fontSize={26} fontWeight={700} fill="#4A90D9" dominantBaseline="middle">
           62.2%
         </text>
-        <text x={1082} y={360} fontSize={16} fontWeight={600} fill="#1d1d1f" dominantBaseline="middle">
+        <text x={1082} y={428} fontSize={16} fontWeight={600} fill="#1d1d1f" dominantBaseline="middle">
           Human-led
         </text>
       </g>
@@ -85,10 +85,10 @@ export function AiAutomationRiskThumbnail() {
         fill="#8e8e93"
         fontWeight={400}
       >
-        <text x={48} y={621} dominantBaseline="middle">
+        <text x={48} y={651} dominantBaseline="middle">
           big pharma · biotech startups · health tech · academia
         </text>
-        <text x={1152} y={621} dominantBaseline="middle" textAnchor="end">
+        <text x={1152} y={651} dominantBaseline="middle" textAnchor="end">
           parulkudtarkar.com
         </text>
       </g>
