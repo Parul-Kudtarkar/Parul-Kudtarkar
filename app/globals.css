@@ -333,6 +333,114 @@ audio::-webkit-media-controls-play-button {
   border-radius: 50%;
 }
 
+/* Apple-style column for AI automation blog post */
+.blog-apple-article {
+  max-width: 680px;
+  margin-left: auto;
+  margin-right: auto;
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "SF Pro Text",
+    "Segoe UI",
+    Roboto,
+    sans-serif;
+  color: #1d1d1f;
+}
+
+.blog-apple-markdown :where(p) {
+  font-size: 17px;
+  line-height: 1.75;
+  color: #1d1d1f;
+  margin-bottom: 1.1em;
+}
+
+.blog-apple-markdown :where(li) {
+  font-size: 17px;
+  line-height: 1.75;
+  color: #1d1d1f;
+}
+
+.blog-apple-markdown :where(h2) {
+  font-size: 1.625rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: #1d1d1f;
+  margin-top: 2.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.blog-apple-markdown :where(h3) {
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  color: #1d1d1f;
+  margin-top: 1.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.blog-apple-markdown :where(h4) {
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: #1d1d1f;
+  margin-top: 1.25rem;
+  margin-bottom: 0.4rem;
+}
+
+.blog-apple-markdown :where(blockquote) {
+  margin: 1.5rem 0;
+  padding-left: 1rem;
+  border-left: 3px solid #d1d1d6;
+  font-size: 17px;
+  line-height: 1.75;
+  color: #6e6e73;
+}
+
+.blog-apple-markdown :where(strong) {
+  font-weight: 600;
+  color: #1d1d1f;
+}
+
+.blog-apple-markdown :where(a) {
+  color: #0066cc;
+  text-decoration: none;
+}
+
+.blog-apple-markdown :where(a:hover) {
+  text-decoration: underline;
+}
+
+.blog-apple-markdown :where(table) {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+  margin: 1.5rem 0;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #e5e5e5;
+}
+
+.blog-apple-markdown :where(th, td) {
+  padding: 12px 16px;
+  border-bottom: 1px solid #f0f0f0;
+  text-align: left;
+  vertical-align: top;
+}
+
+.blog-apple-markdown :where(th) {
+  background: #f5f5f7;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #6e6e73;
+}
+
+.blog-apple-slot {
+  max-width: 100%;
+}
+
 /* Hide Next.js development indicator overlay */
 #__next-build-watcher,
 [data-nextjs-dialog],

@@ -3,7 +3,8 @@ import Footer from "@/components/footer"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { getPostBySlug, getAllPosts } from "@/lib/blog"
-import { highlightCode } from "@/lib/shiki"
+import { formatBlogMarkdown } from "@/lib/format-blog-markdown"
+import { AiAugmentationArticleBody } from "@/components/blog/ai-augmentation-article-body"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { BlogCodeBlockWrapper } from "@/components/blog-code-block-wrapper"
@@ -162,8 +163,18 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         )}
 
         {/* Article Content */}
-        <div className="prose prose-lg dark:prose-invert max-w-none">
-          <BlogCodeBlockWrapper html={await formatContent(post.content)} />
+        <div
+          className={
+            post.slug === "ai-task-augmentation"
+              ? "max-w-none"
+              : "prose prose-lg dark:prose-invert max-w-none"
+          }
+        >
+          {post.slug === "ai-task-augmentation" ? (
+            <AiAugmentationArticleBody content={post.content} />
+          ) : (
+            <BlogCodeBlockWrapper html={await formatBlogMarkdown(post.content)} />
+          )}
         </div>
 
         {/* Footer Navigation */}
@@ -179,155 +190,5 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       <Footer />
     </main>
   )
-}
-
-// Allow only safe URL schemes to prevent XSS
-function isSafeHref(url: string): boolean {
-  const t = url.trim().toLowerCase()
-  return (
-    t.startsWith('https://') ||
-    t.startsWith('http://') ||
-    t.startsWith('mailto:') ||
-    t.startsWith('/') ||
-    t.startsWith('#')
-  )
-}
-
-function escapeHtml(unsafe: string): string {
-  return unsafe
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;')
-}
-
-// Markdown-like formatting with Shiki syntax highlighting for code blocks
-async function formatContent(content: string): Promise<string> {
-  // Helper function to process inline markdown formatting
-  function processInlineMarkdown(text: string): string {
-    let processed = text
-    // Remove escaped markdown first (e.g., \*\* becomes **)
-    processed = processed.replace(/\\\*/g, '*')
-    processed = processed.replace(/\\\[/g, '[')
-    processed = processed.replace(/\\\]/g, ']')
-    processed = processed.replace(/\\\(/g, '(')
-    processed = processed.replace(/\\\)/g, ')')
-    processed = processed.replace(/\\`/g, '`')
-    
-    // Process bold (**text**)
-    processed = processed.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-    // Process italic (*text* or _text_) - but not if it's part of bold
-    processed = processed.replace(/(?<!\*)\*([^*\n]+?)\*(?!\*)/g, '<em>$1</em>')
-    processed = processed.replace(/(?<!_)_([^_\n]+?)_(?!_)/g, '<em>$1</em>')
-    // Process links [text](url) - only allow safe hrefs to prevent XSS
-    processed = processed.replace(
-      /\[([^\]]+)\]\(([^)]+)\)/g,
-      (_, linkText: string, href: string) => {
-        const safeHref = isSafeHref(href) ? href : '#'
-        const safeText = escapeHtml(linkText)
-        return `<a href="${escapeHtml(safeHref)}" class="text-primary hover:underline" rel="noopener noreferrer">${safeText}</a>`
-      }
-    )
-    // Process inline code `code` (escape to prevent XSS)
-    processed = processed.replace(/`([^`]+)`/g, (_, code: string) => `<code class="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">${escapeHtml(code)}</code>`)
-    
-    return processed
-  }
-
-  const lines = content.split('\n')
-  const result: string[] = []
-  let inCodeBlock = false
-  let codeBlockLanguage = ''
-  let codeBlockContent: string[] = []
-
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i]
-    
-    // Handle code blocks (syntax highlighting via Shiki at build/render time)
-    if (line.startsWith('```')) {
-      if (inCodeBlock) {
-        const code = codeBlockContent.join('\n')
-        const highlighted = await highlightCode(code, codeBlockLanguage || 'text')
-        result.push(highlighted)
-        codeBlockContent = []
-        inCodeBlock = false
-        codeBlockLanguage = ''
-      } else {
-        inCodeBlock = true
-        codeBlockLanguage = line.substring(3).trim()
-      }
-      continue
-    }
-
-    if (inCodeBlock) {
-      codeBlockContent.push(line)
-      continue
-    }
-
-    // Headers - process markdown inside headers too
-    if (line.startsWith('# ')) {
-      const headerText = processInlineMarkdown(line.substring(2))
-      result.push(`<h1 class="text-3xl font-bold mt-6 mb-3">${headerText}</h1>`)
-      continue
-    }
-    if (line.startsWith('## ')) {
-      const headerText = processInlineMarkdown(line.substring(3))
-      result.push(`<h2 class="text-2xl font-semibold mt-5 mb-2">${headerText}</h2>`)
-      continue
-    }
-    if (line.startsWith('### ')) {
-      const headerText = processInlineMarkdown(line.substring(4))
-      result.push(`<h3 class="text-xl font-semibold mt-4 mb-2">${headerText}</h3>`)
-      continue
-    }
-    if (line.startsWith('#### ')) {
-      const headerText = processInlineMarkdown(line.substring(5))
-      result.push(`<h4 class="text-lg font-semibold mt-3 mb-1">${headerText}</h4>`)
-      continue
-    }
-    
-    // List items
-    if (line.trim().startsWith('- ') || line.trim().startsWith('* ')) {
-      const listText = processInlineMarkdown(line.trim().substring(2))
-      result.push(`<li class="mb-1">${listText}</li>`)
-      continue
-    }
-    
-    // Empty lines - skip them to reduce spacing
-    if (line.trim() === '') {
-      continue
-    }
-
-    // Regular paragraphs - process inline markdown
-    const processedLine = processInlineMarkdown(line)
-    result.push(`<p class="mb-2 leading-7">${processedLine}</p>`)
-  }
-
-  // Wrap consecutive list items in <ul> tags
-  let finalResult: string[] = []
-  let inList = false
-  
-  for (let i = 0; i < result.length; i++) {
-    if (result[i].startsWith('<li')) {
-      if (!inList) {
-        finalResult.push('<ul class="mb-3 ml-6 list-disc">')
-        inList = true
-      }
-      finalResult.push(result[i])
-    } else {
-      if (inList) {
-        finalResult.push('</ul>')
-        inList = false
-      }
-      finalResult.push(result[i])
-    }
-  }
-  
-  if (inList) {
-    finalResult.push('</ul>')
-  }
-
-  return finalResult.join('\n')
 }
 

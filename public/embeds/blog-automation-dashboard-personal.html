@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Automation Dashboard (Personal task analysis)</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+    <style>
+      :root {
+        --primary-blue: #4a90d9;
+        --purple: #8b5cf6;
+        --pink: #ec4899;
+        --orange: #f97316;
+        --card-blue: #eef3fb;
+        --card-purple: #f3effe;
+        --card-pink: #fef0f7;
+        --card-orange: #fff4ed;
+        --muted: #6b7280;
+        --border: #e5e7eb;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        background: transparent;
+        padding: 14px 12px;
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+        color: #111827;
+      }
+
+      .wrap {
+        max-width: 1000px;
+        margin: 0 auto;
+      }
+
+      .stat-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 12px;
+        margin-bottom: 12px;
+      }
+
+      @media (max-width: 700px) {
+        .stat-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .card {
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        box-shadow: 0 10px 24px rgba(17, 24, 39, 0.06);
+        padding: 14px;
+        background: #ffffff;
+      }
+
+      .stat-card {
+        background: var(--card-blue);
+      }
+
+      .stat-card .label {
+        font-size: 12px;
+        color: var(--muted);
+        margin-bottom: 6px;
+      }
+
+      .stat-card .value {
+        font-size: 26px;
+        font-weight: 800;
+        line-height: 1.05;
+        letter-spacing: -0.02em;
+      }
+
+      .stat-card.blue .value {
+        color: var(--primary-blue);
+      }
+      .stat-card.pink .value {
+        color: var(--pink);
+      }
+      .stat-card.purple .value {
+        color: var(--purple);
+      }
+      .stat-card.orange .value {
+        color: var(--orange);
+      }
+
+      .stat-card.pink {
+        background: var(--card-pink);
+      }
+      .stat-card.purple {
+        background: var(--card-purple);
+      }
+      .stat-card.blue {
+        background: var(--card-blue);
+      }
+      .stat-card.orange {
+        background: var(--card-orange);
+      }
+
+      .chart-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .chart-title {
+        font-size: 12px;
+        color: var(--muted);
+        margin-bottom: 10px;
+      }
+
+      .chart-box {
+        position: relative;
+        height: 380px;
+        width: 100%;
+      }
+
+      .chart-box.small {
+        height: 320px;
+      }
+
+      .legend-row {
+        display: flex;
+        gap: 16px;
+        flex-wrap: wrap;
+        margin-top: 10px;
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 999px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="stat-grid">
+        <div class="card stat-card pink">
+          <div class="label">1 to automate</div>
+          <div class="value">1</div>
+        </div>
+        <div class="card stat-card purple">
+          <div class="label">8 to augment</div>
+          <div class="value">8</div>
+        </div>
+        <div class="card stat-card blue">
+          <div class="label">1 human-led</div>
+          <div class="value">1</div>
+        </div>
+        <div class="card stat-card orange">
+          <div class="label">~14 hrs reclaimed</div>
+          <div class="value">~14</div>
+        </div>
+      </div>
+
+      <div class="chart-grid">
+        <div class="card">
+          <div class="chart-title">Augmentation potential per task (colored by category)</div>
+          <div class="chart-box small">
+            <canvas id="taskAugBarChart"></canvas>
+          </div>
+          <div class="legend-row">
+            <div class="legend-item"><span class="dot" style="background: var(--pink)"></span>Automate</div>
+            <div class="legend-item"><span class="dot" style="background: var(--purple)"></span>Augment</div>
+            <div class="legend-item"><span class="dot" style="background: var(--primary-blue)"></span>Human-led</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="chart-title">Risk × Moat profile (bubble = augmentation potential)</div>
+          <div class="chart-box">
+            <canvas id="riskMoatBubble"></canvas>
+          </div>
+          <div class="legend-row">
+            <div class="legend-item"><span class="dot" style="background: var(--pink)"></span>Automate</div>
+            <div class="legend-item"><span class="dot" style="background: var(--purple)"></span>Augment</div>
+            <div class="legend-item"><span class="dot" style="background: var(--primary-blue)"></span>Human-led</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const labels = [
+        "Reporting & Comms",
+        "PubMed & Biomarker",
+        "Code Gen & Debug",
+        "NGS QC & Preprocessing",
+        "Scientific Writing",
+        "Cross-Org Strategy",
+        "Single-Cell Omics",
+        "ML Model Dev",
+        "LLM/RAG/KG Dev",
+        "Cloud Architecture"
+      ];
+
+      const augPotential = [80, 75, 75, 70, 65, 50, 55, 50, 45, 30];
+      const automationRisk = [8, 7, 7, 7, 7, 5, 5, 5, 4, 3];
+      const strategicMoat = [2, 6, 4, 4, 4, 5, 7, 7, 8, 8];
+
+      const category = [
+        "automate",
+        "augment",
+        "augment",
+        "augment",
+        "augment",
+        "augment",
+        "augment",
+        "augment",
+        "augment",
+        "human"
+      ];
+
+      const getVar = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+
+      const cPink = getVar("--pink");
+      const cPurple = getVar("--purple");
+      const cBlue = getVar("--primary-blue");
+
+      const colorFor = (cat) => {
+        if (cat === "automate") return cPink;
+        if (cat === "human") return cBlue;
+        return cPurple;
+      };
+
+      const barColors = category.map((c) => colorFor(c));
+
+      // Horizontal bar (augmentation potential)
+      new Chart(document.getElementById("taskAugBarChart"), {
+        type: "bar",
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: "Augmentation Potential",
+              data: augPotential,
+              backgroundColor: barColors,
+              borderWidth: 0
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          indexAxis: "y",
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: (ctx) => {
+                  const i = ctx.dataIndex;
+                  return "Aug: " + augPotential[i] + "%";
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              beginAtZero: true,
+              max: 100,
+              grid: { color: "rgba(229,231,235,0.9)" }
+            },
+            y: {
+              grid: { display: false },
+              ticks: { font: { size: 11 } }
+            }
+          }
+        }
+      });
+
+      // Bubble scatter with divider lines at x=5 and y=5
+      const border = getVar("--border");
+      const dividerPlugin = {
+        id: "dividerLines",
+        afterDraw: (chart) => {
+          const xScale = chart.scales.x;
+          const yScale = chart.scales.y;
+          const { ctx, chartArea } = chart;
+          const x = xScale.getPixelForValue(5);
+          const y = yScale.getPixelForValue(5);
+
+          ctx.save();
+          ctx.strokeStyle = border;
+          ctx.lineWidth = 1;
+          ctx.setLineDash([5, 5]);
+          ctx.beginPath();
+
+          // Horizontal line at y=5
+          ctx.moveTo(chartArea.left, y);
+          ctx.lineTo(chartArea.right, y);
+
+          // Vertical line at x=5
+          ctx.moveTo(x, chartArea.top);
+          ctx.lineTo(x, chartArea.bottom);
+
+          ctx.stroke();
+          ctx.restore();
+        }
+      };
+
+      const points = labels.map((name, i) => {
+        const cat = category[i];
+        return {
+          x: automationRisk[i],
+          y: strategicMoat[i],
+          r: Math.max(4, augPotential[i] / 6),
+          aug: augPotential[i],
+          taskName: name,
+          cat: cat,
+          color: colorFor(cat)
+        };
+      });
+
+      new Chart(document.getElementById("riskMoatBubble"), {
+        type: "bubble",
+        data: {
+          datasets: [
+            {
+              label: "Risk × Moat",
+              data: points,
+              backgroundColor: (ctx) => ctx.raw.color,
+              borderColor: (ctx) => ctx.raw.color,
+              borderWidth: 1
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: (ctx) => {
+                  const p = ctx.raw;
+                  return (
+                    p.taskName +
+                    " | risk: " +
+                    p.x +
+                    " | moat: " +
+                    p.y +
+                    " | aug: " +
+                    p.aug +
+                    "%"
+                  );
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              min: 0,
+              max: 10,
+              title: { display: true, text: "Automation Risk →" },
+              grid: { color: "rgba(229,231,235,0.9)" }
+            },
+            y: {
+              min: 0,
+              max: 10,
+              title: { display: true, text: "Strategic Moat →" },
+              grid: { color: "rgba(229,231,235,0.9)" }
+            }
+          }
+        },
+        plugins: [dividerPlugin]
+      });
+    </script>
+  </body>
+</html>
+

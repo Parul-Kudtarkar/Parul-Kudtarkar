@@ -1,0 +1,198 @@
+import { highlightCode } from "@/lib/shiki"
+
+// Allow only safe URL schemes to prevent XSS
+export function isSafeHref(url: string): boolean {
+  const t = url.trim().toLowerCase()
+  return (
+    t.startsWith("https://") ||
+    t.startsWith("http://") ||
+    t.startsWith("mailto:") ||
+    t.startsWith("/") ||
+    t.startsWith("#")
+  )
+}
+
+export function escapeHtml(unsafe: string): string {
+  return unsafe
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;")
+}
+
+/** Markdown-like formatting with Shiki syntax highlighting for code blocks */
+export async function formatBlogMarkdown(content: string): Promise<string> {
+  function processInlineMarkdown(text: string): string {
+    let processed = text
+    processed = processed.replace(/\\\*/g, "*")
+    processed = processed.replace(/\\\[/g, "[")
+    processed = processed.replace(/\\\]/g, "]")
+    processed = processed.replace(/\\\(/g, "(")
+    processed = processed.replace(/\\\)/g, ")")
+    processed = processed.replace(/\\`/g, "`")
+
+    processed = processed.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+    processed = processed.replace(/(?<!\*)\*([^*\n]+?)\*(?!\*)/g, "<em>$1</em>")
+    processed = processed.replace(/(?<!_)_([^_\n]+?)_(?!_)/g, "<em>$1</em>")
+    processed = processed.replace(
+      /\[([^\]]+)\]\(([^)]+)\)/g,
+      (_, linkText: string, href: string) => {
+        const safeHref = isSafeHref(href) ? href : "#"
+        const safeText = escapeHtml(linkText)
+        return `<a href="${escapeHtml(safeHref)}" class="text-primary hover:underline" rel="noopener noreferrer">${safeText}</a>`
+      }
+    )
+    processed = processed.replace(
+      /`([^`]+)`/g,
+      (_, code: string) =>
+        `<code class="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">${escapeHtml(code)}</code>`
+    )
+
+    return processed
+  }
+
+  function splitTableRow(row: string): string[] {
+    const trimmed = row.trim()
+    const parts = trimmed.split("|")
+    return parts.slice(1, -1).map((c) => c.trim())
+  }
+
+  const lines = content.split("\n")
+  const result: string[] = []
+  let inCodeBlock = false
+  let codeBlockLanguage = ""
+  let codeBlockContent: string[] = []
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i]
+    const trimmed = line.trim()
+
+    if (line.startsWith("```")) {
+      if (inCodeBlock) {
+        const code = codeBlockContent.join("\n")
+        const highlighted = await highlightCode(code, codeBlockLanguage || "text")
+        result.push(highlighted)
+        codeBlockContent = []
+        inCodeBlock = false
+        codeBlockLanguage = ""
+      } else {
+        inCodeBlock = true
+        codeBlockLanguage = line.substring(3).trim()
+      }
+      continue
+    }
+
+    if (inCodeBlock) {
+      codeBlockContent.push(line)
+      continue
+    }
+
+    if (line.startsWith("# ")) {
+      const headerText = processInlineMarkdown(line.substring(2))
+      result.push(`<h1 class="text-3xl font-bold mt-6 mb-3">${headerText}</h1>`)
+      continue
+    }
+    if (line.startsWith("## ")) {
+      const headerText = processInlineMarkdown(line.substring(3))
+      result.push(`<h2 class="text-2xl font-semibold mt-5 mb-2">${headerText}</h2>`)
+      continue
+    }
+    if (line.startsWith("### ")) {
+      const headerText = processInlineMarkdown(line.substring(4))
+      result.push(`<h3 class="text-xl font-semibold mt-4 mb-2">${headerText}</h3>`)
+      continue
+    }
+    if (line.startsWith("#### ")) {
+      const headerText = processInlineMarkdown(line.substring(5))
+      result.push(`<h4 class="text-lg font-semibold mt-3 mb-1">${headerText}</h4>`)
+      continue
+    }
+
+    if (trimmed.startsWith("- ") || trimmed.startsWith("* ")) {
+      const listText = processInlineMarkdown(trimmed.substring(2))
+      result.push(`<li class="mb-1">${listText}</li>`)
+      continue
+    }
+
+    if (trimmed.startsWith(">")) {
+      const quoteText = trimmed.replace(/^>\s?/, "")
+      const processedQuote = processInlineMarkdown(quoteText)
+      result.push(`<blockquote>${processedQuote}</blockquote>`)
+      continue
+    }
+
+    if (trimmed.startsWith("<iframe")) {
+      result.push(trimmed)
+      continue
+    }
+
+    const nextTrimmed = lines[i + 1]?.trim()
+    if (
+      trimmed.startsWith("|") &&
+      nextTrimmed &&
+      nextTrimmed.startsWith("|") &&
+      nextTrimmed.includes("---")
+    ) {
+      const headerCells = splitTableRow(trimmed)
+      const rows: string[][] = []
+      let j = i + 2
+      while (j < lines.length) {
+        const r = lines[j].trim()
+        if (!r.startsWith("|")) break
+        rows.push(splitTableRow(r))
+        j++
+      }
+
+      const thead = `<thead><tr>${headerCells
+        .map((h) => `<th>${processInlineMarkdown(h)}</th>`)
+        .join("")}</tr></thead>`
+      const tbody = `<tbody>${rows
+        .map((row) => {
+          const padded = [...row]
+          while (padded.length < headerCells.length) padded.push("")
+          return `<tr>${padded
+            .map((c) => `<td>${processInlineMarkdown(c)}</td>`)
+            .join("")}</tr>`
+        })
+        .join("")}</tbody>`
+
+      result.push(`<div class="my-4 overflow-x-auto"><table>${thead}${tbody}</table></div>`)
+
+      i = j - 1
+      continue
+    }
+
+    if (trimmed === "") {
+      continue
+    }
+
+    const processedLine = processInlineMarkdown(line)
+    result.push(`<p class="mb-2 leading-7">${processedLine}</p>`)
+  }
+
+  let finalResult: string[] = []
+  let inList = false
+
+  for (let i = 0; i < result.length; i++) {
+    if (result[i].startsWith("<li")) {
+      if (!inList) {
+        finalResult.push('<ul class="mb-3 ml-6 list-disc">')
+        inList = true
+      }
+      finalResult.push(result[i])
+    } else {
+      if (inList) {
+        finalResult.push("</ul>")
+        inList = false
+      }
+      finalResult.push(result[i])
+    }
+  }
+
+  if (inList) {
+    finalResult.push("</ul>")
+  }
+
+  return finalResult.join("\n")
+}

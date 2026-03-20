@@ -1,3 +1,6 @@
+import fs from "node:fs"
+import path from "node:path"
+
 export interface BlogPost {
   slug: string
   title: string
@@ -11,6 +14,11 @@ export interface BlogPost {
   featured?: boolean
   image?: string
   audioUrl?: string
+}
+
+function readBlogMarkdown(fileName: string): string {
+  const absPath = path.join(process.cwd(), "content", "blog", fileName)
+  return fs.readFileSync(absPath, "utf8")
 }
 
 // Sample blog posts - in production, you might load these from markdown files or a CMS
@@ -353,7 +361,19 @@ Stay tuned for more content!`,
     readingTime: 2,
     featured: true,
     audioUrl: "/audio/welcome-to-my-blog.mp3",
-  }
+  },
+  {
+    slug: "ai-task-augmentation",
+    title: "I ran every task in a bioinformatics job description through an AI risk model. Here's the breakdown.",
+    description:
+      "A data-driven analysis of AI augmentation potential across computational biology and life sciences, using Anthropic's labor market data, 176 job descriptions and a live test on my own role.",
+    date: "2026-03-15",
+    author: "Parul Kudtarkar",
+    category: "AI",
+    tags: ["AI Task Augmentation", "life sciences"],
+    image: "/ai-automation-risk-thumbnail.webp",
+    content: readBlogMarkdown("ai-task-augmentation.md"),
+  },
 ]
 
 export function getAllPosts(): BlogPost[] {
