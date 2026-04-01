@@ -316,6 +316,18 @@
   @apply border-l-4 border-primary pl-4 italic my-4 text-muted-foreground;
 }
 
+.blog-content :where(table) {
+  @apply w-full border-collapse text-sm;
+}
+
+.blog-content :where(thead th) {
+  @apply border border-border bg-muted font-semibold text-foreground px-4 py-3 text-left align-top;
+}
+
+.blog-content :where(tbody td) {
+  @apply border border-border px-4 py-3 text-left align-top;
+}
+
 /* Audio player styling (blog listen feature) */
 audio,
 .audio-player {
@@ -439,6 +451,66 @@ audio::-webkit-media-controls-play-button {
 
 .blog-apple-slot {
   max-width: 100%;
+}
+
+/* CNN-on-DNA blog animation (Understanding AlphaGenome Part 1) */
+@keyframes cnn-dna-filter-move {
+  0% {
+    transform: translateX(0);
+  }
+  30.77% {
+    transform: translateX(208px);
+  }
+  38.46% {
+    transform: translateX(208px);
+  }
+  69.23% {
+    transform: translateX(416px);
+  }
+  100% {
+    transform: translateX(416px);
+  }
+}
+
+@keyframes cnn-dna-activation-fade {
+  0%,
+  30.5% {
+    opacity: 0;
+  }
+  32% {
+    opacity: 1;
+  }
+  37.5% {
+    opacity: 1;
+  }
+  39%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.cnn-dna-filter-g {
+  animation: cnn-dna-filter-move 6.5s linear infinite;
+  will-change: transform;
+}
+
+.cnn-dna-activation {
+  animation: cnn-dna-activation-fade 6.5s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cnn-dna-filter-g,
+  .cnn-dna-activation {
+    animation: none;
+  }
+
+  .cnn-dna-filter-g {
+    transform: translateX(208px);
+  }
+
+  .cnn-dna-activation {
+    opacity: 1;
+  }
 }
 
 /* Hide Next.js development indicator overlay */

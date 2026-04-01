@@ -6,6 +6,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { Calendar, Clock, ArrowRight, Headphones } from "lucide-react"
 import { format } from "date-fns"
+import { CnnDnaAnimation } from "@/components/blog/cnn-dna-animation"
+
+const ALPHAGENOME_PART1_SLUG = "understanding-alphagenome-part-1-biology-problem"
 
 export const metadata = {
   title: 'Blog | Parul Kudtarkar',
@@ -35,14 +38,26 @@ export default function BlogPage() {
             {posts.map((post) => (
               <Link key={post.slug} href={`/blog/${post.slug}`} className="group">
                 <Card className="h-full flex flex-col hover:shadow-lg transition-shadow duration-300 overflow-hidden">
-                  {post.image && (
-                    <div className="w-full h-48 overflow-hidden">
-                      <img
-                        src={post.image}
-                        alt={post.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                      />
+                  {post.slug === ALPHAGENOME_PART1_SLUG ? (
+                    <div className="relative h-48 w-full overflow-hidden border-b border-border bg-gradient-to-b from-muted/50 to-background">
+                      <div
+                        className="pointer-events-none absolute left-1/2 top-1/2 w-max"
+                        style={{ transform: "translate(-50%, -50%) scale(0.5)" }}
+                        aria-hidden
+                      >
+                        <CnnDnaAnimation variant="card" />
+                      </div>
                     </div>
+                  ) : (
+                    post.image && (
+                      <div className="w-full h-48 overflow-hidden">
+                        <img
+                          src={post.image}
+                          alt={post.title}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
+                      </div>
+                    )
                   )}
                   <CardHeader>
                     <div className="flex items-center gap-2 mb-2 flex-wrap">

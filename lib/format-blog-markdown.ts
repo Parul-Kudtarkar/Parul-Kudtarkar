@@ -32,6 +32,15 @@ export async function formatBlogMarkdown(content: string): Promise<string> {
     processed = processed.replace(/\\\)/g, ")")
     processed = processed.replace(/\\`/g, "`")
 
+    processed = processed.replace(
+      /!\[([^\]]*)\]\(([^)]+)\)/g,
+      (_match, alt: string, href: string) => {
+        const safeHref = isSafeHref(href) ? href : "#"
+        const safeAlt = escapeHtml(alt)
+        return `<img src="${escapeHtml(safeHref)}" alt="${safeAlt}" class="w-full max-w-2xl rounded-lg border border-border shadow-sm my-6 mx-auto block" loading="lazy" />`
+      }
+    )
+
     processed = processed.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
     processed = processed.replace(/(?<!\*)\*([^*\n]+?)\*(?!\*)/g, "<em>$1</em>")
     processed = processed.replace(/(?<!_)_([^_\n]+?)_(?!_)/g, "<em>$1</em>")
@@ -122,7 +131,14 @@ export async function formatBlogMarkdown(content: string): Promise<string> {
       continue
     }
 
-    if (trimmed.startsWith("<iframe")) {
+    if (
+      trimmed.startsWith("<iframe") ||
+      trimmed.startsWith("<figure") ||
+      trimmed.startsWith("<figcaption") ||
+      trimmed.startsWith("<img")
+      || trimmed.startsWith("</figcaption") ||
+      trimmed.startsWith("</figure")
+    ) {
       result.push(trimmed)
       continue
     }
@@ -157,7 +173,9 @@ export async function formatBlogMarkdown(content: string): Promise<string> {
         })
         .join("")}</tbody>`
 
-      result.push(`<div class="my-4 overflow-x-auto"><table>${thead}${tbody}</table></div>`)
+      result.push(
+        `<div class="my-4 overflow-x-auto rounded-lg border border-border shadow-sm"><table class="w-full">${thead}${tbody}</table></div>`
+      )
 
       i = j - 1
       continue

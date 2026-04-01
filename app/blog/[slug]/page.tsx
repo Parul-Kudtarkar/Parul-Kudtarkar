@@ -8,6 +8,8 @@ import { AiAugmentationArticleBody } from "@/components/blog/ai-augmentation-art
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { BlogCodeBlockWrapper } from "@/components/blog-code-block-wrapper"
+import { CnnDnaAnimation } from "@/components/blog/cnn-dna-animation"
+import type { ReactNode } from "react"
 import { Calendar, Clock, ArrowLeft, Tag, Headphones } from "lucide-react"
 import { format } from "date-fns"
 
@@ -61,6 +63,30 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
   if (!post) {
     notFound()
+  }
+
+  const CNN_DNA_ANIM_MARKER = "__CNN_DNA_ANIM__"
+
+  let articleBody: ReactNode
+  if (post.slug === "ai-task-augmentation") {
+    articleBody = <AiAugmentationArticleBody content={post.content} />
+  } else if (post.content.includes(CNN_DNA_ANIM_MARKER)) {
+    const [before, after] = post.content.split(CNN_DNA_ANIM_MARKER, 2)
+    const [htmlBefore, htmlAfter] = await Promise.all([
+      formatBlogMarkdown(before),
+      formatBlogMarkdown(after),
+    ])
+    articleBody = (
+      <>
+        <BlogCodeBlockWrapper html={htmlBefore} />
+        <CnnDnaAnimation />
+        <BlogCodeBlockWrapper html={htmlAfter} />
+      </>
+    )
+  } else {
+    articleBody = (
+      <BlogCodeBlockWrapper html={await formatBlogMarkdown(post.content)} />
+    )
   }
 
   return (
@@ -122,8 +148,8 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           )}
         </header>
 
-        {/* Featured Image */}
-        {post.image && (
+        {/* Featured Image (skipped when hideHeroImage: figure lives in article body only) */}
+        {post.image && !post.hideHeroImage && (
           <div className="mb-8 rounded-lg overflow-hidden">
             <img
               src={post.image}
@@ -170,11 +196,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               : "prose prose-lg dark:prose-invert max-w-none"
           }
         >
-          {post.slug === "ai-task-augmentation" ? (
-            <AiAugmentationArticleBody content={post.content} />
-          ) : (
-            <BlogCodeBlockWrapper html={await formatBlogMarkdown(post.content)} />
-          )}
+          {articleBody}
         </div>
 
         {/* Footer Navigation */}
