@@ -24,13 +24,15 @@ export default function ArtGallery() {
     <section>
       {/* Exhibitions Section */}
       <div className="border-b border-border bg-card/30">
-        <div className="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-16">
-          <h2 className="text-3xl font-bold mb-8">Exhibitions</h2>
+        <div className="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-16 text-center">
+          <p className="typography-section-label" role="heading" aria-level={2}>
+            Exhibitions
+          </p>
           <div className="space-y-3">
             {exhibitions.map((exhibit, index) => (
-              <div key={index} className="flex items-center space-x-3">
-                <div className="w-1.5 h-1.5 rounded-full bg-accent"></div>
-                <p className="text-lg text-foreground">{exhibit}</p>
+              <div key={index} className="flex items-center justify-center gap-3">
+                <div className="h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
+                <p className="typography-exhibition-line m-0">{exhibit}</p>
               </div>
             ))}
           </div>
@@ -39,7 +41,9 @@ export default function ArtGallery() {
 
       {/* Premium Gallery Grid */}
       <div className="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-20">
-        <h2 className="text-3xl font-bold mb-12">Featured Works</h2>
+        <p className="typography-section-label" role="heading" aria-level={2}>
+          Featured Works
+        </p>
 
         {/* Premium Masonry Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -60,7 +64,9 @@ export default function ArtGallery() {
                 {/* Overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-start p-6 pointer-events-none">
                   <div>
-                    <h3 className="text-lg font-semibold text-foreground">{artwork.title}</h3>
+                    <p className="typography-content-title text-foreground" role="heading" aria-level={3}>
+                      {artwork.title}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -90,8 +96,10 @@ export default function ArtGallery() {
             </div>
 
             <div className="text-center mt-6">
-              <h3 className="text-2xl font-semibold text-white mb-2">{artworks[selectedImage].title}</h3>
-              <p className="text-gray-300">
+              <p className="typography-content-title text-white mb-2" role="heading" aria-level={3}>
+                {artworks[selectedImage].title}
+              </p>
+              <p className="text-[12px] font-normal text-neutral-400">
                 {selectedImage + 1} / {artworks.length}
               </p>
             </div>

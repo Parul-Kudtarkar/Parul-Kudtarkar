@@ -40,12 +40,14 @@ export function FrameworkStepCards() {
           }}
         >
           <div
-            className="mb-3 flex h-7 w-7 items-center justify-center rounded-full text-[13px] font-bold text-white"
+            className="mb-3 flex h-7 w-7 items-center justify-center rounded-full text-[13px] font-medium text-white"
             style={{ backgroundColor: step.accent }}
           >
             {step.num}
           </div>
-          <h4 className="mb-2 text-[16px] font-semibold text-[#1d1d1f]">{step.name}</h4>
+          <p className="mb-2 text-[16px] font-medium text-[#1d1d1f]" role="heading" aria-level={4}>
+            {step.name}
+          </p>
           <p
             className="m-0 text-[14px] leading-[1.65] text-[#3d3d3f]"
           >

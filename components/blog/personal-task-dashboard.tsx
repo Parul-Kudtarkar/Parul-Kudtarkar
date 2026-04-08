@@ -182,7 +182,7 @@ export function PersonalTaskDashboard() {
             style={{ padding: "16px" }}
           >
             <div
-              className="text-[28px] font-semibold leading-none"
+              className="text-[17px] font-medium leading-none"
               style={{ color: s.valueColor }}
             >
               {s.value}

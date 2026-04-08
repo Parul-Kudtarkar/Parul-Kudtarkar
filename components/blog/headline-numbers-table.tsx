@@ -28,13 +28,13 @@ export function HeadlineNumbersTable() {
         <thead>
           <tr className="bg-[#f5f5f7]">
             <th
-              className="px-5 py-3 text-[13px] font-semibold uppercase tracking-[0.05em] text-[#6e6e73]"
+              className="px-5 py-3 text-[13px] font-medium uppercase tracking-[0.05em] text-[#6e6e73]"
               style={{ padding: "12px 20px" }}
             >
               Metric
             </th>
             <th
-              className="px-5 py-3 text-[13px] font-semibold uppercase tracking-[0.05em] text-[#6e6e73]"
+              className="px-5 py-3 text-[13px] font-medium uppercase tracking-[0.05em] text-[#6e6e73]"
               style={{ padding: "12px 20px" }}
             >
               Figure
@@ -57,7 +57,7 @@ export function HeadlineNumbersTable() {
                 {row.metric}
               </td>
               <td
-                className="text-[15px] font-semibold text-[#1d1d1f]"
+                className="text-[15px] font-medium text-[#1d1d1f]"
                 style={{ padding: "14px 20px" }}
               >
                 {row.figure}

@@ -6,12 +6,12 @@ import { ArrowLeft } from "lucide-react"
 
 export default function NotFound() {
   return (
-    <main className="min-h-screen bg-background">
+    <main className="min-h-screen bg-transparent">
       <Header />
       <section className="container mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-20">
         <div className="flex flex-col items-center justify-center min-h-[60vh] text-center space-y-6">
-          <h1 className="text-4xl md:text-5xl font-bold">Post Not Found</h1>
-          <p className="text-xl text-muted-foreground">
+          <h1 className="typography-page-title">Post Not Found</h1>
+          <p className="typography-body">
             The blog post you're looking for doesn't exist or has been removed.
           </p>
           <Link href="/blog">

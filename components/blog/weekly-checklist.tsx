@@ -109,7 +109,7 @@ export function WeeklyChecklist() {
             </span>
             <span className="min-w-0 flex-1" style={{ borderLeft: `3px solid ${item.accent}`, paddingLeft: "12px" }}>
               <span
-                className="block font-semibold text-[#1d1d1f] transition-all duration-200"
+                className="block font-medium text-[#1d1d1f] transition-all duration-200"
                 style={{ textDecoration: isChecked ? "line-through" : undefined }}
               >
                 {item.title}

@@ -52,7 +52,7 @@ function QuadrantCard({ cell }: { cell: QuadrantCell }) {
       }}
     >
       <span
-        className="mb-2.5 inline-block font-semibold uppercase tracking-[0.05em]"
+        className="mb-2.5 inline-block font-medium uppercase tracking-[0.05em]"
         style={{
           borderRadius: "20px",
           padding: "3px 12px",

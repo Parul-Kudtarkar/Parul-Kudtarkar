@@ -103,7 +103,7 @@ export function OccupationRiskTable() {
             ).map((h) => (
               <th
                 key={h}
-                className="text-[12px] font-semibold uppercase tracking-[0.06em] text-[#6e6e73]"
+                className="text-[12px] font-medium uppercase tracking-[0.06em] text-[#6e6e73]"
                 style={{ padding: "12px 16px" }}
               >
                 {h}

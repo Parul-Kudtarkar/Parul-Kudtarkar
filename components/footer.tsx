@@ -3,7 +3,7 @@ import { Linkedin, Github, ExternalLink } from "lucide-react"
 
 export default function Footer() {
   return (
-    <footer className="border-t border-border bg-card/30">
+    <footer className="glass-footer">
       <div className="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-12">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-8">
           <div>

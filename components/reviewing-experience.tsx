@@ -16,18 +16,20 @@ export default function ReviewingExperience() {
   ]
 
   return (
-    <section className="border-t border-border bg-card/30">
-      <div className="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-20">
-        <h2 className="text-3xl md:text-4xl font-bold mb-12">Reviewing Experience</h2>
+    <section className="glass-section">
+      <div className="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <p className="typography-section-label" role="heading" aria-level={2}>
+          Reviewing Experience
+        </p>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {reviewing.map((item, index) => (
             <div
               key={index}
-              className="p-6 rounded-lg border border-border bg-background hover:border-accent transition-colors"
+              className="glass-card-surface p-6 transition-colors hover:bg-white/60 dark:hover:bg-white/[0.09]"
             >
-              <h3 className="text-lg font-semibold mb-3">{item.title}</h3>
-              <p className="text-sm text-muted-foreground">{item.content}</p>
+              <p className="typography-content-title mb-3">{item.title}</p>
+              <p className="typography-body">{item.content}</p>
             </div>
           ))}
         </div>

@@ -34,7 +34,7 @@ export function HeadlineFindingStats() {
         >
           <div className="rounded-lg p-3" style={{ backgroundColor: c.bg }}>
             <div
-              className="text-2xl font-bold tabular-nums tracking-tight"
+              className="text-[17px] font-medium tabular-nums tracking-tight"
               style={{ color: c.valueColor }}
             >
               {c.value}

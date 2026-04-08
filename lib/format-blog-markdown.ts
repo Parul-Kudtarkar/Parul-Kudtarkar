@@ -99,22 +99,22 @@ export async function formatBlogMarkdown(content: string): Promise<string> {
 
     if (line.startsWith("# ")) {
       const headerText = processInlineMarkdown(line.substring(2))
-      result.push(`<h1 class="text-3xl font-bold mt-6 mb-3">${headerText}</h1>`)
+      result.push(`<h1>${headerText}</h1>`)
       continue
     }
     if (line.startsWith("## ")) {
       const headerText = processInlineMarkdown(line.substring(3))
-      result.push(`<h2 class="text-2xl font-semibold mt-5 mb-2">${headerText}</h2>`)
+      result.push(`<h2>${headerText}</h2>`)
       continue
     }
     if (line.startsWith("### ")) {
       const headerText = processInlineMarkdown(line.substring(4))
-      result.push(`<h3 class="text-xl font-semibold mt-4 mb-2">${headerText}</h3>`)
+      result.push(`<h3>${headerText}</h3>`)
       continue
     }
     if (line.startsWith("#### ")) {
       const headerText = processInlineMarkdown(line.substring(5))
-      result.push(`<h4 class="text-lg font-semibold mt-3 mb-1">${headerText}</h4>`)
+      result.push(`<h4>${headerText}</h4>`)
       continue
     }
 

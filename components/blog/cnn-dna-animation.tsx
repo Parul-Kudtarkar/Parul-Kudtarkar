@@ -72,7 +72,7 @@ export function CnnDnaAnimation({
               }}
             >
               <span
-                className="block text-center text-[10px] font-semibold leading-tight sm:text-xs"
+                className="block text-center text-[10px] font-medium leading-tight sm:text-xs"
                 style={{ color: C.tf }}
               >
                 TATA filter (4 bp)
@@ -84,7 +84,7 @@ export function CnnDnaAnimation({
               style={{ marginTop: 56, width: "100%" }}
             >
               <div
-                className="rounded-md px-2 py-1 text-center text-[11px] font-semibold shadow-sm sm:text-xs"
+                className="rounded-md px-2 py-1 text-center text-[11px] font-medium shadow-sm sm:text-xs"
                 style={{
                   border: `2px solid ${C.promoter}`,
                   color: C.enhancer,
@@ -107,7 +107,7 @@ export function CnnDnaAnimation({
               return (
                 <div
                   key={i}
-                  className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md text-base font-semibold"
+                  className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md text-base font-medium"
                   style={{
                     border: `2px solid ${C.backbone}`,
                     color: C.backbone,

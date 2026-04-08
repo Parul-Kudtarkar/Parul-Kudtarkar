@@ -18,7 +18,7 @@ export default function WorkExperience() {
     {
       title: "Echinobase",
       dates: "January 2011 – June 2017",
-      description: `Led comparative genomics platform serving 150+ research laboratories worldwide. Developed end-to-end pipelines for 7 echinoderm species, integrating RNA-seq and ATAC-seq data to infer transcriptional networks and identify conserved regulatory elements.`,
+      description: `Built Echinobase and end-to-end sequence analysis for 7 echinoderm species. Built a comparative genomics platform serving 150+ labs worldwide. Integrated RNA-seq and ATAC-seq to infer transcriptional networks across 7 echinoderm species.`,
     },
     {
       title: "Cloud Computing for Comparative Genomics",
@@ -28,30 +28,32 @@ export default function WorkExperience() {
   ]
 
   return (
-    <section className="border-t border-border/50 bg-secondary/30">
-      <div className="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-20">
+    <section className="glass-section">
+      <div className="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <div
           className={`transition-all duration-700 ${
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
           }`}
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-12">Work Experience</h2>
+          <p className="typography-section-label" role="heading" aria-level={2}>
+            Work Experience
+          </p>
         </div>
 
-        <div className="space-y-12">
+        <div className="space-y-6">
           {experience.map((item, index) => (
             <div
               key={index}
-              className={`pb-12 border-b border-border/30 last:border-b-0 last:pb-0 transition-all duration-700 ${
+              className={`pb-6 border-b border-[#d2d2d7] last:border-b-0 last:pb-0 transition-all duration-700 dark:border-[#424245] ${
                 isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
               }`}
               style={{
                 transitionDelay: isVisible ? `${(index + 1) * 100}ms` : "0ms",
               }}
             >
-              <h3 className="text-2xl md:text-3xl font-semibold mb-3">{item.title}</h3>
-              <p className="text-sm text-muted-foreground mb-6 font-medium">{item.dates}</p>
-              <p className="text-foreground/80 text-base leading-relaxed font-light">{item.description}</p>
+              <p className="typography-content-title mb-3 max-w-3xl">{item.title}</p>
+              <p className="typography-meta mb-4">{item.dates}</p>
+              <p className="typography-body max-w-3xl">{item.description}</p>
             </div>
           ))}
         </div>

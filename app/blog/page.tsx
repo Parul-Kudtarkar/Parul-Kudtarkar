@@ -21,13 +21,13 @@ export default function BlogPage() {
   const tags = getAllTags()
 
   return (
-    <main className="min-h-screen bg-background">
+    <main className="min-h-screen bg-transparent">
       <Header />
       <section className="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-12 md:py-20">
         {/* Header */}
         <div className="mb-12 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Blog</h1>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+          <h1 className="typography-page-title">Blog</h1>
+          <p className="typography-body mx-auto max-w-2xl">
             Insights about AI, disease etiology and cure
           </p>
         </div>
@@ -35,7 +35,9 @@ export default function BlogPage() {
         {/* Blog Posts Grid */}
         {posts.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-            {posts.map((post) => (
+            {posts.map((post) => {
+              const coverImage = (post as unknown as { coverImage?: string }).coverImage
+              return (
               <Link key={post.slug} href={`/blog/${post.slug}`} className="group">
                 <Card className="h-full flex flex-col hover:shadow-lg transition-shadow duration-300 overflow-hidden">
                   {post.slug === ALPHAGENOME_PART1_SLUG ? (
@@ -49,10 +51,10 @@ export default function BlogPage() {
                       </div>
                     </div>
                   ) : (
-                    post.image && (
+                    coverImage && (
                       <div className="w-full h-48 overflow-hidden">
                         <img
-                          src={post.image}
+                          src={coverImage}
                           alt={post.title}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                         />
@@ -78,15 +80,15 @@ export default function BlogPage() {
                         </Badge>
                       )}
                     </div>
-                    <CardTitle className="group-hover:text-primary transition-colors line-clamp-2">
+                    <CardTitle className="typography-content-title line-clamp-2 group-hover:text-primary transition-colors">
                       {post.title}
                     </CardTitle>
-                    <CardDescription className="line-clamp-3 mt-2">
+                    <CardDescription className="typography-body line-clamp-3 mt-2">
                       {post.description}
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="flex-1 flex flex-col justify-end">
-                    <div className="flex items-center gap-4 text-sm text-muted-foreground mb-4">
+                    <div className="typography-meta flex items-center gap-4 mb-4">
                       <div className="flex items-center gap-1">
                         <Calendar className="w-4 h-4" />
                         <span>{format(new Date(post.date), "MMM d, yyyy")}</span>
@@ -112,19 +114,22 @@ export default function BlogPage() {
                         )}
                       </div>
                     )}
-                    <div className="flex items-center text-primary font-medium text-sm group-hover:gap-2 transition-all">
+                    <div className="flex items-center text-primary text-[14px] font-normal group-hover:gap-2 transition-all">
                       Read more
                       <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
                     </div>
                   </CardContent>
                 </Card>
               </Link>
-            ))}
+              )
+            })}
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center min-h-[60vh] text-center space-y-6">
-            <h2 className="text-2xl font-semibold">No posts yet</h2>
-            <p className="text-muted-foreground max-w-md">
+            <p className="typography-content-title" role="heading" aria-level={2}>
+              No posts yet
+            </p>
+            <p className="typography-body max-w-md">
               Blog posts will appear here once they're published.
             </p>
           </div>
@@ -136,7 +141,9 @@ export default function BlogPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {categories.length > 0 && (
                 <div>
-                  <h3 className="text-lg font-semibold mb-4">Categories</h3>
+                  <p className="typography-section-label" role="heading" aria-level={3}>
+                    Categories
+                  </p>
                   <div className="flex flex-wrap gap-2">
                     {categories.map((category) => (
                       <Badge key={category} variant="secondary" className="text-sm">
@@ -148,7 +155,9 @@ export default function BlogPage() {
               )}
               {tags.length > 0 && (
                 <div>
-                  <h3 className="text-lg font-semibold mb-4">Tags</h3>
+                  <p className="typography-section-label" role="heading" aria-level={3}>
+                    Tags
+                  </p>
                   <div className="flex flex-wrap gap-2">
                     {tags.map((tag) => (
                       <Badge key={tag} variant="outline" className="text-sm">

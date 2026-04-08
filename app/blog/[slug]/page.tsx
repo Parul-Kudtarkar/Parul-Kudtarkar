@@ -90,7 +90,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   }
 
   return (
-    <main className="min-h-screen bg-background">
+    <main className="min-h-screen bg-transparent">
       <Header />
       <article className="container mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-12 md:py-20">
         {/* Back Button */}
@@ -115,11 +115,11 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               </Badge>
             )}
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">{post.title}</h1>
-          <p className="text-xl text-muted-foreground mb-6">{post.description}</p>
+          <h1 className="typography-page-title">{post.title}</h1>
+          <p className="typography-body mb-6">{post.description}</p>
           
           {/* Meta Information */}
-          <div className="flex flex-wrap items-center gap-6 text-sm text-muted-foreground mb-6 pb-6 border-b border-border">
+          <div className="typography-meta flex flex-wrap items-center gap-6 mb-6 pb-6 border-b border-border">
             <div className="flex items-center gap-2">
               <Calendar className="w-4 h-4" />
               <span>{format(new Date(post.date), "MMMM d, yyyy")}</span>
@@ -167,8 +167,10 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 <Headphones className="h-5 w-5" />
               </div>
               <div>
-                <h3 className="text-lg font-semibold">Listen to this article</h3>
-                <p className="text-sm text-muted-foreground">
+                <p className="typography-content-title" role="heading" aria-level={3}>
+                  Listen to this article
+                </p>
+                <p className="typography-body">
                   Play the audio version while you read or on the go.
                 </p>
               </div>

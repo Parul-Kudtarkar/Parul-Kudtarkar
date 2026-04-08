@@ -52,6 +52,10 @@ export default function RootLayout({
         <meta httpEquiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
       </head>
       <body className={`font-sans antialiased`}>
+        <div className="pointer-events-none fixed inset-0 -z-10" aria-hidden>
+          <div className="site-ambient-mesh" />
+          <div className="site-ambient-noise" />
+        </div>
         {children}
         {process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID && (
           <>

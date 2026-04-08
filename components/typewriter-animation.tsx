@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 
 export function TypewriterAnimation() {
-  const fullText = "Transforming health through AI and genomics."
+  const fullText = "Turning biology into insight."
   const [displayedText, setDisplayedText] = useState("")
   const [currentIndex, setCurrentIndex] = useState(0)
 
@@ -20,7 +20,7 @@ export function TypewriterAnimation() {
   return (
     <div className="min-h-10">
       {displayedText && (
-        <p className="text-2xl md:text-3xl lg:text-4xl font-semibold tracking-wide bg-gradient-to-r from-pink-500 via-purple-500 to-green-500 bg-clip-text text-transparent">
+        <p className="text-2xl md:text-3xl lg:text-4xl font-medium tracking-wide bg-gradient-to-r from-pink-500 via-purple-500 to-green-500 bg-clip-text text-transparent">
           {displayedText}
         </p>
       )}

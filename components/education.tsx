@@ -19,19 +19,21 @@ export default function Education() {
   ]
 
   return (
-    <section className="border-t border-border">
-      <div className="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-20">
-        <h2 className="text-3xl md:text-4xl font-bold mb-12">Education</h2>
+    <section className="glass-section">
+      <div className="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <p className="typography-section-label" role="heading" aria-level={2}>
+          Education
+        </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {education.map((item, index) => (
             <div
               key={index}
-              className="p-6 rounded-lg border border-border bg-card/50 hover:bg-card/80 transition-colors"
+              className="glass-card-surface p-6 transition-colors hover:bg-white/60 dark:hover:bg-white/[0.09]"
             >
-              <h3 className="text-lg font-semibold mb-2">{item.degree}</h3>
-              <p className="text-sm text-accent font-medium mb-3">{item.school}</p>
-              <p className="text-sm text-muted-foreground">{item.details}</p>
+              <p className="typography-content-title mb-2">{item.degree}</p>
+              <p className="typography-meta mb-3">{item.school}</p>
+              <p className="typography-body">{item.details}</p>
             </div>
           ))}
         </div>

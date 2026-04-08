@@ -4,7 +4,9 @@ export default function PublicationsContent() {
       <div className="space-y-16">
         {/* Peer-Reviewed Publications */}
         <div className="space-y-6">
-          <h2 className="text-3xl font-bold">Peer-Reviewed Publications</h2>
+          <p className="typography-section-label" role="heading" aria-level={2}>
+            Peer-Reviewed Publications
+          </p>
           <div className="space-y-6">
             {[
               {
@@ -86,9 +88,11 @@ export default function PublicationsContent() {
               },
             ].map((pub, index) => (
               <div key={index} className="pb-6 border-b border-border last:border-b-0 last:pb-0">
-                <h3 className="text-lg font-semibold mb-2">{pub.title}</h3>
-                <p className="text-sm text-muted-foreground mb-2">{pub.authors}</p>
-                <p className="text-sm text-accent font-medium">{pub.journal}</p>
+                <p className="typography-content-title" role="heading" aria-level={3}>
+                  {pub.title}
+                </p>
+                <p className="typography-meta mb-2">{pub.authors}</p>
+                <p className="typography-meta">{pub.journal}</p>
               </div>
             ))}
           </div>
@@ -96,7 +100,9 @@ export default function PublicationsContent() {
 
         {/* Invited Talks */}
         <div className="space-y-6">
-          <h2 className="text-3xl font-bold">Invited Talks</h2>
+          <p className="typography-section-label" role="heading" aria-level={2}>
+            Invited Talks
+          </p>
           <div className="space-y-4">
             {[
               { title: "AMP CMD Portals", venue: "AMP CMD Parliament Meeting (2025)" },
@@ -111,8 +117,10 @@ export default function PublicationsContent() {
               },
             ].map((talk, index) => (
               <div key={index} className="pb-4 border-b border-border last:border-b-0 last:pb-0">
-                <h3 className="font-semibold mb-1">{talk.title}</h3>
-                <p className="text-sm text-muted-foreground">{talk.venue}</p>
+                <p className="typography-content-title" role="heading" aria-level={3}>
+                  {talk.title}
+                </p>
+                <p className="typography-meta">{talk.venue}</p>
               </div>
             ))}
           </div>
