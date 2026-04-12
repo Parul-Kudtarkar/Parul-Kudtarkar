@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useState } from "react"
@@ -15,16 +16,24 @@ export default function Header() {
   return (
     <header className="glass-header smooth-transition">
       <div className="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          <Link href="/" className="flex items-center space-x-2 smooth-transition hover:opacity-80">
-            <div className="w-8 h-8 rounded-full bg-foreground flex items-center justify-center">
-              <span className="text-background font-medium text-xs">PK</span>
-            </div>
-            <span className="font-medium text-base hidden sm:inline">Parul Kudtarkar</span>
+        <div className="flex h-16 items-center justify-between gap-4">
+          <Link
+            href="/"
+            className="flex h-full items-center ps-3 sm:ps-4 smooth-transition hover:opacity-80 shrink-0"
+            aria-label="Parul Kudtarkar home"
+          >
+            <Image
+              src="/logo.png"
+              alt=""
+              width={240}
+              height={48}
+              className="block h-12 w-auto max-h-12 object-contain object-left mix-blend-multiply"
+              priority
+            />
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-8">
+          <nav className="hidden md:flex h-full items-center space-x-8">
             <Link href="/" className={`transition-colors ${navLinkClass("/")}`}>
               Home
             </Link>

@@ -9,32 +9,44 @@ const _geistMono = Geist_Mono({ subsets: ["latin"] });
 // Set NEXT_PUBLIC_SITE_URL in GitHub Actions (repo variable SITE_URL) or .env to your custom domain (e.g. Google/Squarespace)
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://parulkudtarkar.com'
 
+const defaultTitle = 'Parul Kudtarkar - ML & Genomics Researcher'
+const defaultDescription =
+  'Harvard, Caltech & UCSD trained AI/genomics researcher. Led $12.5M NIH diabetes project, 15+ publications, pioneer in metabolic disease research & drug discovery.'
+
 export const metadata: Metadata = {
-  title: 'Parul Kudtarkar - ML & Genomics Researcher',
-  description: 'Harvard, Caltech & UCSD trained AI/genomics researcher. Led $12.5M NIH diabetes project, 15+ publications, pioneer in metabolic disease research & drug discovery.',
+  title: defaultTitle,
+  description: defaultDescription,
   metadataBase: new URL(siteUrl),
   referrer: 'strict-origin-when-cross-origin',
   openGraph: {
     type: 'website',
+    locale: 'en_US',
+    url: siteUrl,
+    siteName: 'Parul Kudtarkar',
+    title: defaultTitle,
+    description: defaultDescription,
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'Parul Kudtarkar',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: defaultTitle,
+    description: defaultDescription,
+    images: ['/og-image.png'],
   },
   icons: {
     icon: [
-      {
-        url: '/icon.svg',
-        type: 'image/svg+xml',
-      },
-      {
-        url: '/icon-light-32x32.png',
-        media: '(prefers-color-scheme: light)',
-        sizes: '32x32',
-      },
-      {
-        url: '/icon-dark-32x32.png',
-        media: '(prefers-color-scheme: dark)',
-        sizes: '32x32',
-      },
+      { url: '/favicon.png', type: 'image/png', sizes: '32x32' },
+      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
     ],
-    apple: '/apple-icon.png',
+    apple: '/apple-touch-icon.png',
   },
 }
 
