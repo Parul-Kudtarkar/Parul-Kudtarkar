@@ -11,8 +11,6 @@ I design and deliver **production-scale genomic data programs**, building the in
 
 I own the full stack: pipeline architecture, model selection, optimization, evaluation and biological interpretation. Not just the code, the system that makes the science reproducible, scalable, and useful to partners who discover the medicine.
 
-> *"I don't just run pipelines. I build the systems that make every subsequent program faster, cheaper, and more reliable; then hand them to research partners who actually discover the medicine."*
-
 ---
 
 ## Flagship Programs
